@@ -1,68 +1,55 @@
+// Copyright 2013 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:trainbloc/table_view_lib/table_view/table.dart';
-import 'package:trainbloc/table_view_lib/table_view/table_cell.dart';
-import 'package:trainbloc/table_view_lib/table_view/table_span.dart';
+import 'package:trainbloc/two_dim_table.dart';
+
+// Print statements are only for illustrative purposes, not recommended for
+// production applications.
+// ignore_for_file: avoid_print
 
 void main() {
-  runApp(const MyApp());
+  runApp(const TableExampleApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+/// A sample application that utilizes the TableView API.
+class TableExampleApp extends StatelessWidget {
+  /// Creates an instance of the TableView example app.
+  const TableExampleApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Table Example',
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
+      home: const TableExample(),
+    );
+  }
+}
+
+/// The class containing the TableView for the sample application.
+class TableExample extends StatefulWidget {
+  /// Creates a screen that demonstrates the TableView widget.
+  const TableExample({super.key});
+
+  @override
+  State<TableExample> createState() => _TableExampleState();
+}
+
+class _TableExampleState extends State<TableExample> {
+  late final ScrollController _verticalController = ScrollController();
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          title: const Text(
-            "Main",
-            style: TextStyle(color: Colors.white),
-          ),
-          centerTitle: true,
-        ),
         body: SafeArea(
-          child: Expanded(
-            child: TableView.builder(
-              pinnedRowCount: 1,
-              columnCount: 20,
-              rowCount: 20,
-              columnBuilder: (int column) {
-                return const TableSpan(
-                  extent: FixedTableSpanExtent(100),
-                  foregroundDecoration: TableSpanDecoration(
-                    border: TableSpanBorder(
-                      trailing: BorderSide(
-                        color: Colors.black,
-                        width: 2,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                  ),
-                );
-              },
-              rowBuilder: (int row) {
-                return TableSpan(
-                  extent: const FixedTableSpanExtent(100),
-                  backgroundDecoration: TableSpanDecoration(
-                    color: row.isEven ? Colors.blueAccent[100] : Colors.white,
-                  ),
-                );
-              },
-              cellBuilder: (BuildContext context, TableVicinity vicinity) {
-                return Center(
-                  child: Text('Cell ${vicinity.column} : ${vicinity.row}'),
-                );
-              },
-            ),
-          ),
+          child: TableTwoDims(),
         ),
       ),
     );
